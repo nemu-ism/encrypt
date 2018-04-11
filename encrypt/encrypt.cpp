@@ -3,33 +3,61 @@
 #include <string>
 #include <iostream>
 
-#define key 123
-#define SIZE 16
+#define key 412
+#define SIZE 1024
 
-
-int main(int argc, char* argv[])
-{
-	int i;
+void encrypt(char* file) {
 	char str[SIZE];
-	FILE *fp;
-	FILE *file;
+	int sft;
+	FILE *rf;
+	FILE *wf;
 	errno_t error;
-	if (fopen_s(&fp, argv[1], "rb") != 0) {
+	if (fopen_s(&rf, file, "rb") != 0) {
 		std::cout << "ファイルが見つかりません" << std::endl;
 		exit(0);
-	} else {
-		error = fopen_s(&file, "encrypted.jpg", "wb");	
+	}
+	else {
+		error = fopen_s(&wf, "encrypted.jpg", "wb");
 		while (1) {
-			int n = fread(str, 1, SIZE, fp);
-			if (n < 1) break;
-			for (i = 0; i < n; i++) {
-				putc(str[i] ^ key, file);
+			int l = fread(str, 1, SIZE, rf);
+			if (l < 1) break;
+			for (int i = 0; i < l; i++) {
+				putc(str[i] ^ key, wf);
 			}
 		}
 	}
 
-	fclose(fp);
-	fclose(file);
-    return 0;
+	fclose(rf);
+	fclose(wf);
 }
 
+void decrypt() {
+	char str[SIZE];
+	FILE *rf;
+	FILE *wf;
+	errno_t error;
+	if (fopen_s(&rf, "encrypted.jpg", "rb") != 0) {
+		std::cout << "ファイルが見つかりません" << std::endl;
+		exit(0);
+	}
+	else {
+		error = fopen_s(&wf, "decrypted.jpg", "wb");
+		while (1) {
+			int l = fread(str, 1, SIZE, rf);
+			if (l < 1) break;
+			for (int i = 0; i < l; i++) {
+				putc(str[i] ^ key, wf);
+			}
+		}
+	}
+
+	fclose(rf);
+	fclose(wf);
+}
+
+int main(int argc, char* argv[])
+{
+	encrypt(argv[1]);
+	decrypt();
+    return 0;
+}
