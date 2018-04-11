@@ -7,17 +7,17 @@
 #define SIZE 1024
 #define n 2018
 
-void encrypt(char* file) {
+void encrypt(char* read, char* write) {
 	char str[SIZE];
 	FILE *rf;
 	FILE *wf;
 	errno_t error;
 
-	if (fopen_s(&rf, file, "rb") != 0) {
+	if (fopen_s(&rf, read, "rb") != 0) {
 		std::cout << "ファイルが見つかりません" << std::endl;
 		exit(0);
 	} else {
-		error = fopen_s(&wf, "encrypted.jpg", "wb");
+		error = fopen_s(&wf, write, "wb");
 		while (1) {
 			int l = fread(str, 1, SIZE, rf);
 			if (l < 1) break;
@@ -33,6 +33,7 @@ void encrypt(char* file) {
 	fclose(wf);
 }
 
+//decrypt.exe分割用
 void decrypt() {
 	char str[SIZE];
 	FILE *rf;
@@ -60,7 +61,7 @@ void decrypt() {
 
 int main(int argc, char* argv[])
 {
-	encrypt(argv[1]);
-	decrypt();
+	encrypt(argv[1], argv[2]);
+	//decrypt();
     return 0;
 }
