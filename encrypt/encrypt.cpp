@@ -13,7 +13,7 @@ void encrypt(char* read, char* write) {
 	FILE *wf;
 	errno_t error;
 
-	if (fopen_s(&rf, read, "rb") != 0) {
+	if (fopen_s(&rf, read, "rb") != 0 || write == NULL) {
 		std::cout << "ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ" << std::endl;
 		exit(0);
 	} else {
