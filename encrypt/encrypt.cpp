@@ -9,10 +9,10 @@
 
 void encrypt(char* file) {
 	char str[SIZE];
-	int sft;
 	FILE *rf;
 	FILE *wf;
 	errno_t error;
+
 	if (fopen_s(&rf, file, "rb") != 0) {
 		std::cout << "ファイルが見つかりません" << std::endl;
 		exit(0);
@@ -23,7 +23,8 @@ void encrypt(char* file) {
 			if (l < 1) break;
 			for (int i = 0; i < l; i++) {
 				for (int j = 0; j <= n; j++) str[i] = (str[i] ^ key) + n;
-				putc(str[i], wf);
+				//putc(str[i], wf);
+				fwrite(&str[i], sizeof(str[i]), 1, wf);
 			}
 		}
 	}
@@ -34,10 +35,10 @@ void encrypt(char* file) {
 
 void decrypt() {
 	char str[SIZE];
-	int sft;
 	FILE *rf;
 	FILE *wf;
 	errno_t error;
+
 	if (fopen_s(&rf, "encrypted.jpg", "rb") != 0) {
 		std::cout << "ファイルが見つかりません" << std::endl;
 		exit(0);
@@ -48,7 +49,7 @@ void decrypt() {
 			if (l < 1) break;
 			for (int i = 0; i < l; i++) {
 				for (int j = 0; j <= n; j++) str[i] = (str[i] - n) ^ key;
-				putc(str[i], wf);
+				fwrite(&str[i], sizeof(str[i]), 1, wf);
 			}
 		}
 	}
