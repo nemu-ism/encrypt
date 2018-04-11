@@ -3,34 +3,33 @@
 #include <string>
 #include <iostream>
 
-#define X 13
-
-void encrypt(char *str) {
-	int i;
-	int len;
-	len = strlen(str);
-	for (i = 0; i < len; i++) {
-		if (str[i] >= 'a' && str[i] <= 'z')
-			str[i] = (str[i] - 'a' + X) % 26 + 'a';
-		return;
-	}
-}
+#define key 123
+#define SIZE 16
 
 
-int main()
+int main(int argc, char* argv[])
 {
-	char str[256];
-	std::cout << "数値データ入力" << std::endl;
-	std::cin >> str;
-
-	while (NULL != fgets(str, sizeof(str), stdin)) {
-		encrypt(str);
-		printf("%s", str);
+	int i;
+	char str[SIZE];
+	FILE *fp;
+	FILE *file;
+	errno_t error;
+	if (fopen_s(&fp, argv[1], "rb") != 0) {
+		std::cout << "ファイルが見つかりません" << std::endl;
+		exit(0);
+	} else {
+		error = fopen_s(&file, "encrypted.jpg", "wb");	
+		while (1) {
+			int n = fread(str, 1, SIZE, fp);
+			if (n < 1) break;
+			for (i = 0; i < n; i++) {
+				putc(str[i] ^ key, file);
+			}
+		}
 	}
 
-	std::cout << "データ" << str << std::endl;
-	std::cin >> str;
-
+	fclose(fp);
+	fclose(file);
     return 0;
 }
 
