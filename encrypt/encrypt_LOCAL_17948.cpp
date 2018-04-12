@@ -23,6 +23,7 @@ void encrypt(char* read, char* write) {
 			if (l < 1) break;
 			for (int i = 0; i < l; i++) {
 				for (int j = 0; j <= n; j++) str[i] = (str[i] ^ key) + n;
+				//putc(str[i], wf);
 				fwrite(&str[i], sizeof(str[i]), 1, wf);
 			}
 		}

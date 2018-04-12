@@ -13,7 +13,7 @@ void encrypt(char* read, char* write) {
 	FILE *wf;
 	errno_t error;
 
-	if (fopen_s(&rf, read, "rb") != 0 || write == NULL) {
+	if (fopen_s(&rf, read, "rb") != 0) {
 		std::cout << "ファイルが見つかりません" << std::endl;
 		exit(0);
 	} else {
@@ -23,6 +23,33 @@ void encrypt(char* read, char* write) {
 			if (l < 1) break;
 			for (int i = 0; i < l; i++) {
 				for (int j = 0; j <= n; j++) str[i] = (str[i] ^ key) + n;
+				//putc(str[i], wf);
+				fwrite(&str[i], sizeof(str[i]), 1, wf);
+			}
+		}
+	}
+
+	fclose(rf);
+	fclose(wf);
+}
+
+//decrypt.exe分割用
+void decrypt() {
+	char str[SIZE];
+	FILE *rf;
+	FILE *wf;
+	errno_t error;
+
+	if (fopen_s(&rf, "encrypted.jpg", "rb") != 0) {
+		std::cout << "ファイルが見つかりません" << std::endl;
+		exit(0);
+	} else {
+		error = fopen_s(&wf, "decrypted.jpg", "wb");
+		while (1) {
+			int l = fread(str, 1, SIZE, rf);
+			if (l < 1) break;
+			for (int i = 0; i < l; i++) {
+				for (int j = 0; j <= n; j++) str[i] = (str[i] - n) ^ key;
 				fwrite(&str[i], sizeof(str[i]), 1, wf);
 			}
 		}
@@ -35,5 +62,6 @@ void encrypt(char* read, char* write) {
 int main(int argc, char* argv[])
 {
 	encrypt(argv[1], argv[2]);
+	//decrypt();
     return 0;
 }
